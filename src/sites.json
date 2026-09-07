@@ -1,0 +1,26 @@
+{
+  "updatedAt": "2026-09-07",
+  "sites": [
+    {
+      "id": "game",
+      "name": "UACG GAMES",
+      "label": "游戏",
+      "main": "https://uacg.games",
+      "cdn": "https://d2jk2nxe3yjxed.cloudfront.net"
+    },
+    {
+      "id": "ai",
+      "name": "UACG AI",
+      "label": "AI",
+      "main": "https://uacg.ai",
+      "cdn": "https://d6yokos9995d.cloudfront.net"
+    },
+    {
+      "id": "video",
+      "name": "UACG",
+      "label": "视频",
+      "main": "https://uacg.moe",
+      "cdn": "https://dxc4rtyvdpyq6.cloudfront.net"
+    }
+  ]
+}
