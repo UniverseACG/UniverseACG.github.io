@@ -6,6 +6,7 @@ const root = fileURLToPath(new URL("../", import.meta.url));
 const out = path.join(root, "dist");
 const { sites, updatedAt } = JSON.parse(await readFile(path.join(root, "src/sites.json"), "utf8"));
 const base = new URL(process.env.PUBLIC_SITE_URL || "https://universeacg.github.io/");
+if (!base.pathname.endsWith("/")) base.pathname += "/";
 if (base.protocol !== "https:" || base.username || base.password || base.search || base.hash) throw new Error("PUBLIC_SITE_URL must be a public HTTPS URL");
 const esc = (value) => String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
 if (sites.length !== 3 || new Set(sites.map((site) => site.id)).size !== 3) throw new Error("Expected three distinct products");
@@ -23,13 +24,16 @@ function group(site) {
 }
 function render(site) {
   const prefix = site ? "../" : "./";
-  const title = site ? `${site.name} · 回家的路` : "UACG · 回家的路";
-  const description = site ? `${site.name} 主站与备用地址。` : "UACG 游戏、AI、视频主站与备用地址。";
+  const title = site ? `${site.name} ${site.label}入口与备用地址 · 回家的路` : "UACG 官方入口与备用地址 · 回家的路";
+  const description = site ? `${site.name} ${site.label}主站与备用入口地址发布页。收藏回家的路，访问主站、备用入口或 UACG Telegram 频道。` : "UACG 地址发布页，汇集 UACG GAMES 游戏、UACG AI 角色对话和 UACG 视频的主站与备用入口。收藏回家的路，方便下次访问。";
   const route = site ? `${site.id}/` : "";
   return `<!doctype html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
+<meta name="google-site-verification" content="YaAspV9E1niy2bfqfDJ4NW_gZcO2cXubI6m06mN0ZCU">
+<meta name="msvalidate.01" content="6DBD7C19D09CD7EB475B6F0A082B5A91">
+<meta name="yandex-verification" content="0cc74f539be8b917">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#fff8fa">
@@ -38,6 +42,13 @@ function render(site) {
 <meta name="referrer" content="no-referrer">
 <link rel="canonical" href="${esc(new URL(route, base))}">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="UACG 回家的路">
+<meta property="og:url" content="${esc(new URL(route, base))}">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="${esc(title)}">
+<meta name="twitter:description" content="${esc(description)}">
+<meta name="twitter:image" content="${esc(new URL("assets/icon-512.png", base))}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:image" content="${esc(new URL("assets/icon-512.png", base))}">
@@ -67,3 +78,10 @@ await writeFile(path.join(out, "robots.txt"), `User-agent: *\nAllow: /\nSitemap:
 await writeFile(path.join(out, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${["", ...sites.map((site) => `${site.id}/`)].map((route) => `<url><loc>${esc(new URL(route, base))}</loc><lastmod>${updatedAt}</lastmod></url>`).join("")}</urlset>`);
 await writeFile(path.join(out, "_headers"), "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: no-referrer\n  Content-Security-Policy: default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'\n  Cache-Control: public, max-age=0, must-revalidate\n");
 console.log("Built 4 UACG address pages with 6 business entry URLs.");
+
+await cp(path.join(root, "src/verification"), out, { recursive: true });
+const indexNowKey = process.env.INDEXNOW_KEY?.trim();
+if (indexNowKey) {
+  if (!/^[a-zA-Z0-9-]{8,128}$/.test(indexNowKey)) throw new Error("Invalid INDEXNOW_KEY");
+  await writeFile(path.join(out, `${indexNowKey}.txt`), indexNowKey);
+}
