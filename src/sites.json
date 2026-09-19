@@ -1,0 +1,32 @@
+{
+  "updatedAt": "2026-09-19",
+  "sites": [
+    {
+      "id": "game",
+      "name": "UACG GAMES",
+      "label": "游戏",
+      "main": "https://uacg.games",
+      "entry2": "https://game2.aiacg.xyz",
+      "entry3": "https://game3.aiacg.xyz",
+      "cdn": "https://d2jk2nxe3yjxed.cloudfront.net"
+    },
+    {
+      "id": "ai",
+      "name": "UACG AI",
+      "label": "AI",
+      "main": "https://uacg.ai",
+      "entry2": "https://ai2.aiacg.xyz",
+      "entry3": "https://ai3.aiacg.xyz",
+      "cdn": "https://d6yokos9995d.cloudfront.net"
+    },
+    {
+      "id": "video",
+      "name": "UACG",
+      "label": "视频",
+      "main": "https://uacg.moe",
+      "entry2": "https://video2.aiacg.xyz",
+      "entry3": "https://video3.aiacg.xyz",
+      "cdn": "https://dxc4rtyvdpyq6.cloudfront.net"
+    }
+  ]
+}
